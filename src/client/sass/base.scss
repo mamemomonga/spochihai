@@ -57,7 +57,22 @@ table th {
 	padding: 10px;
 }
 
-#toot-comment-textarea {
-	width: 715px;
+#comment-textarea {
+	width: 700px;
 	height: 100px;
 }
+
+p {
+	font-size: 14pt;
+}
+
+#track-style {
+ 	white-space:pre;
+	font-weight: bold;
+	margin: 10px 0 30px 30px;
+}
+
+#admin {
+	margin: 50px 0 0 0;
+}
+

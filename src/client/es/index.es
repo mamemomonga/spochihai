@@ -11,6 +11,8 @@ import {
 	getHashParams,
 } from '../../utils.es'
 
+const DEBUG=false
+
 // HandlerBar
 class HandleBarsUtil {
 	constructor(targets) {
@@ -37,9 +39,20 @@ class Index {
 		this.storage = localStorage
 
 		this.hb=new HandleBarsUtil({
-			debug:       { template: 'debug-template', placeholder: 'debug' },
-			currentlyPlaying: { template: 'currently-playing-template', placeholder: 'currently-playing' }
+			debug:            { template: 'debug-template', placeholder: 'debug' },
+			currentlyPlaying: { template: 'currently-playing-template', placeholder: 'currently-playing' },
 		})
+
+		const track_styles=[
+			"{{name}} / {{artist}}\n{{url}}\n{{tags}}",
+			'"{{name}}" from "{{album}}" / {{artist}}'+"\n{{url}}\n{{tags}}",
+			"Track: {{name}}\nArtist: {{artist}}\nAlbum: {{album}}\n{{url}}\n{{tags}}"
+		]
+		this.track_styles=[]
+		for(let i in track_styles) {
+			this.track_styles[i]=Handlebars.compile(track_styles[i])
+		}
+		this.current_track_style=this.storage.getItem('track-style') || 0
 	}
 
 	ajax_currently_playing() {
@@ -55,32 +68,66 @@ class Index {
 		idE('logout').addEventListener('click',()=>{
 			this.storage.removeItem('access_token')
 			this.storage.removeItem('refresh_token')
+			this.storage.removeItem('append-tag')
+			this.storage.removeItem('track-style')
 			location.href='/'
 		}, false)
+
 		idE('update').addEventListener('click',()=>{
 			this.update_currently_playing()
 		}, false)
+
 		idE('toot').addEventListener('click',()=>{
-			const comment=idE('toot-comment-textarea').value
-			const text=
-				( comment ? comment+"\n" : '' )
-				+`[#ｽﾎﾟﾁﾊｲ] ${this.current_playing.name} / ${this.current_playing.artist}\n`
-				+`${this.current_playing.url}`
-			window.open('https://mstdn.jp/share?text='+encodeURIComponent(text))
+			window.open('https://mstdn.jp/share?text='+encodeURIComponent(this.track_text))
 		}, false)
+
+		idE('track-style-change').addEventListener('click',()=>{
+			this.current_track_style++
+			if(this.track_styles.length == this.current_track_style ) {
+				this.current_track_style=0
+			}
+			this.update_track_text()
+			this.storage.setItem('track-style',this.current_track_style)
+		}, false)
+
+		idE('comment-textarea').addEventListener('change',()=>{
+			this.update_track_text()
+		}, false)
+		idE('append-tag').addEventListener('change',()=>{
+			this.update_track_text()
+			this.storage.setItem('append-tag',idE('append-tag').value)
+		}, false)
+	}
+
+	update_track_text() {
+		const append_tag = idE('append-tag').value ? ' '+idE('append-tag').value : ''
+		const comment=idE('comment-textarea').value
+		this.track_text=
+			( comment ? comment+"\n\n" : '' )
+			+this.track_styles[this.current_track_style](
+				Object.assign({
+					tags: '#ｽﾎﾟﾁﾊｲ'+append_tag,
+				},this.current_playing)		
+			)
+		
+		idE('track-style').innerHTML=this.track_text
 	}
 
 	update_currently_playing() {
 		this.ajax_currently_playing()
 		.then((r)=>{
 			this.current_playing={
-				artist: r.item.artists[0].name,
-				name:   r.item.name,
+				artist:  r.item.artists[0].name,
+				name:    r.item.name,
+				album:   r.item.album.name,
 				artwork: r.item.album.images[1].url,
 				url: r.item.external_urls.spotify
 			}
 			this.hb.currentlyPlaying(this.current_playing)
-//			this.hb.debug({ debug: JSON.stringify(r.item, null, 2) })
+			this.update_track_text()
+			if(DEBUG) {
+				this.hb.debug({ debug: JSON.stringify(r.item, null, 2) })
+			}
 		})
 	}
 
@@ -103,6 +150,10 @@ class Index {
 		} else if(this.storage.getItem('access_token')) {
 			this.access_token  = this.storage.getItem('access_token')
 			this.refresh_token = this.storage.getItem('refresh_token')
+		}
+
+		if(this.storage.getItem('append-tag')) {
+			idE('append-tag').value=this.storage.getItem('append-tag')
 		}
 
 		if(!this.access_token) {
