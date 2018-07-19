@@ -9,6 +9,7 @@ import {
 	idEnable,
 	eventsController,
 	getHashParams,
+	escapeHTML
 } from '../../utils.es'
 
 const DEBUG=false
@@ -44,9 +45,9 @@ class Index {
 		})
 
 		const track_styles=[
-			"{{name}} / {{artist}}\n{{url}}\n{{tags}}",
-			'"{{name}}" from "{{album}}" / {{artist}}'+"\n{{url}}\n{{tags}}",
-			"Track: {{name}}\nArtist: {{artist}}\nAlbum: {{album}}\n{{url}}\n{{tags}}"
+			"{{{name}}} / {{{artist}}}\n{{{url}}}\n{{{tags}}}",
+			'"{{{name}}}" from "{{{album}}}" / {{{artist}}}'+"\n{{{url}}}\n{{{tags}}}",
+			"Track: {{{name}}}\nArtist: {{{artist}}}\nAlbum: {{{album}}}\n{{{url}}}\n{{{tags}}}"
 		]
 		this.track_styles=[]
 		for(let i in track_styles) {
@@ -68,8 +69,8 @@ class Index {
 		idE('logout').addEventListener('click',()=>{
 			this.storage.removeItem('access_token')
 			this.storage.removeItem('refresh_token')
-			this.storage.removeItem('append-tag')
-			this.storage.removeItem('track-style')
+//			this.storage.removeItem('append-tag')
+//			this.storage.removeItem('track-style')
 			location.href='/'
 		}, false)
 
@@ -78,8 +79,7 @@ class Index {
 		}, false)
 
 		idE('toot').addEventListener('click',()=>{
-			const text=encodeURIComponent(this.track_text).replace(/amp\%3B/g,"")
-			console.log(text)
+			const text=encodeURIComponent(this.track_text)
 			window.open('https://mstdn.jp/share?text='+text)
 		}, false)
 
@@ -104,7 +104,7 @@ class Index {
 		idE('search-google').addEventListener('click',()=>{
 			window.open('https://www.google.co.jp/search?q='
 				+encodeURIComponent(
-					`${this.current_playing.name} ${this.current_playing.artist}`.replace(/amp\%3B/g,"")
+					`${this.current_playing.name} ${this.current_playing.artist}`
 				)
 			)
 		}, false)
@@ -112,7 +112,7 @@ class Index {
 		idE('search-youtube').addEventListener('click',()=>{
 			window.open('https://www.youtube.com/results?search_query='
 				+encodeURIComponent(
-					`${this.current_playing.name} ${this.current_playing.artist}`.replace(/amp\%3B/g,"")
+					`${this.current_playing.name} ${this.current_playing.artist}`
 				)
 			)
 		}, false)
@@ -129,7 +129,7 @@ class Index {
 					tags: '#ｽﾎﾟﾁﾊｲ'+append_tag,
 				},this.current_playing)		
 			)
-		idE('track-style').innerHTML=this.track_text.replace(/\n/g,"<br>");
+		idE('track-style').innerHTML=escapeHTML(this.track_text).replace(/\n/g,"<br>");
 	}
 
 	update_currently_playing() {
