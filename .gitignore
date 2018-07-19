@@ -1,0 +1,4 @@
+node_modules
+/var
+yarn-error.log
+.env

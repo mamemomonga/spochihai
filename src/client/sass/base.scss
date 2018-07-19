@@ -1,0 +1,63 @@
+// vim:ft=css
+@import "./_reset";
+
+html {
+	height: 100%;
+}
+
+body {
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color: #FFFFFF;
+	color: #000000;
+	height: 100%;
+/*	overflow: hidden; */
+}
+
+#login, #loggedin {
+  display: none;
+}
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 500px;
+}
+
+table {
+	height: 178px;
+	width: 350px;
+	font-size: 12pt;
+	line-height: 12pt;
+}
+
+table td {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	padding: 10px;
+	vertical-align: middle;
+	text-align: left;
+}
+table th {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	padding: 10px;
+	vertical-align: middle;
+	text-align: center;
+	background-color: #DDDDDD;
+}
+
+.artwork {
+	max-height: 180px;
+	max-width: 180px;
+	border: 1px solid #000000;
+}
+
+#currently-playing {
+	padding: 10px;
+}
+
+#toot-comment-textarea {
+	width: 715px;
+	height: 100px;
+}

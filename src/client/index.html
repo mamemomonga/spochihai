@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>#ｽﾎﾟﾁﾊｲ</title>
+	<script src="/index.js"></script>
+	<script src="/handlebars.min.js"></script>
+	<link rel="stylesheet" href="/base.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+      <div id="login">
+        <h1>#ｽﾎﾟﾁﾊｲ</h1>
+		<p>これは、<a href="https://mstdn.jp/" target="_blank">mstdn.jp</a>に<a href="https://mstdn.jp/tags/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank">#ｽﾎﾟﾁﾊｲ</a>タグをつけてトゥートするツールです。</p>
+        <a href="/login" class="btn btn-primary">Spotifyと接続</a>
+      </div>
+      <div id="loggedin">
+        <div id="currently-playing"></div>
+
+        <button class="btn btn-default" id="update">更新</button>
+
+		<div id="toot-comment">
+		<h2>コメント</h2>
+		<textarea id="toot-comment-textarea"></textarea>
+		</div>
+        <button class="btn btn-default" id="toot">mstdn.jpでトゥート</button>
+
+		<div id="admin">
+		<h2>ログアウト</h2>
+        <button class="btn btn-default" id="logout">ブラウザから認証情報を削除</button>
+		</div>
+
+		<div id="debug"></div>
+      </div>
+    </div>
+
+</body>
+
+<script id="currently-playing-template" type="text/x-handlebars-template">
+<h2>再生中</h2>
+
+<div style="padding: 0 10px 0 0; float:left"><img src="{{artwork}}" class="artwork"></div>
+<table>
+<tr><th>Artist</th><td>{{artist}}</td></tr>
+<tr><th>Name</th><td>{{name}}</td></tr>
+<tr><th>URL</th><td><a href="{{url}}" target="_blank">{{url}}</a></td></tr>
+</table>
+
+<div class="clearfix"></div>
+
+</script>
+
+<script id="debug-template" type="text/x-handlebars-template">
+  <h2>Debug</h2>
+  <pre>{{debug}}</pre>
+</script>
+
+</html>
