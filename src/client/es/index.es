@@ -78,7 +78,9 @@ class Index {
 		}, false)
 
 		idE('toot').addEventListener('click',()=>{
-			window.open('https://mstdn.jp/share?text='+encodeURIComponent(this.track_text))
+			const text=encodeURIComponent(this.track_text).replace(/amp\%3B/g,"")
+			console.log(text)
+			window.open('https://mstdn.jp/share?text='+text)
 		}, false)
 
 		idE('track-style-change').addEventListener('click',()=>{
@@ -109,8 +111,7 @@ class Index {
 					tags: '#ｽﾎﾟﾁﾊｲ'+append_tag,
 				},this.current_playing)		
 			)
-		
-		idE('track-style').innerHTML=this.track_text
+		idE('track-style').innerHTML=this.track_text.replace(/\n/g,"<br>");
 	}
 
 	update_currently_playing() {
