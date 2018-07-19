@@ -11,7 +11,7 @@ import {
 	getHashParams,
 } from '../../utils.es'
 
-const DEBUG=true
+const DEBUG=false
 
 // HandlerBar
 class HandleBarsUtil {
