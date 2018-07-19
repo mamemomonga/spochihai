@@ -11,7 +11,7 @@ import {
 	getHashParams,
 } from '../../utils.es'
 
-const DEBUG=false
+const DEBUG=true
 
 // HandlerBar
 class HandleBarsUtil {
@@ -95,10 +95,28 @@ class Index {
 		idE('comment-textarea').addEventListener('change',()=>{
 			this.update_track_text()
 		}, false)
+
 		idE('append-tag').addEventListener('change',()=>{
 			this.update_track_text()
 			this.storage.setItem('append-tag',idE('append-tag').value)
 		}, false)
+
+		idE('search-google').addEventListener('click',()=>{
+			window.open('https://www.google.co.jp/search?q='
+				+encodeURIComponent(
+					`${this.current_playing.name} ${this.current_playing.artist}`.replace(/amp\%3B/g,"")
+				)
+			)
+		}, false)
+
+		idE('search-youtube').addEventListener('click',()=>{
+			window.open('https://www.youtube.com/results?search_query='
+				+encodeURIComponent(
+					`${this.current_playing.name} ${this.current_playing.artist}`.replace(/amp\%3B/g,"")
+				)
+			)
+		}, false)
+
 	}
 
 	update_track_text() {
@@ -117,8 +135,12 @@ class Index {
 	update_currently_playing() {
 		this.ajax_currently_playing()
 		.then((r)=>{
+			let artists=[]
+			for (var i in r.item.artists) {
+				artists.push(r.item.artists[i].name)
+			}
 			this.current_playing={
-				artist:  r.item.artists[0].name,
+				artist:  artists.join(', ',artists),
 				name:    r.item.name,
 				album:   r.item.album.name,
 				artwork: r.item.album.images[1].url,

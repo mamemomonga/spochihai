@@ -14,9 +14,15 @@ body {
 /*	overflow: hidden; */
 }
 
+.container {
+	width: 800px;
+}
+
+
 #login, #loggedin {
   display: none;
 }
+
 .text-overflow {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -71,6 +77,7 @@ p {
 	padding: 20px;
 	font-weight: bold;
 	margin: 10px 0 30px 30px;
+	width: 700px;
 }
 
 #admin {
