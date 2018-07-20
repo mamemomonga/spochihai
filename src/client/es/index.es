@@ -67,7 +67,7 @@ class Index {
 		this.regist_eventListeners()
 
 		// access_token 更新期間
-		setInterval(()=>{ this.ajax_refresh_token() },1000*30)
+		setInterval(()=>{ this.ajax_refresh_token() },1000*60)
 
 		if(params.access_token){
 			this.access_token  = params.access_token
@@ -225,6 +225,16 @@ class Index {
 				)
 			)
 		}, false)
+
+		idE('auto-update').addEventListener('click',()=>{
+			if(this.auto_update_int) { clearInterval(this.auto_update_int) }
+			if( idE('auto-update').checked ) {
+				this.auto_update_int=setInterval(()=>{ this.update_currently_playing() },1000*10)
+				console.log('start autoupdate')
+			} 
+		}, false)
+
+
 	}
 }
 
