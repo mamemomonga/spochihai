@@ -188,6 +188,11 @@ class Index {
 			window.open('https://'+idE('mstdn-instance').value+'/share?text='+text)
 		}, false)
 
+		idE('tweet').addEventListener('click',()=>{
+			const text=encodeURIComponent(this.track_text)
+			window.open('https://twitter.com/intent/tweet?text='+text)
+		}, false)
+
 		idE('track-style-change').addEventListener('click',()=>{
 			this.current_track_style++
 			if(this.track_styles.length == this.current_track_style ) {
