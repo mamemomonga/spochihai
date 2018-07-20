@@ -29,6 +29,12 @@ http://localhost:8888/ でサーバが起動される。 CTRL+Cで終了
 
 	$ docker rm -f spochihai
 
+# .env ファイルを現在のシェルの環境変数として設定する方法
+
+ローカル環境での開発時に便利です。
+
+	$ eval "$( cat .env | perl -E 'while(<>) { chomp; say "export $_" }' )" 
+
 # License
 
 MIT

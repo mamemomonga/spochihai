@@ -56,6 +56,44 @@ class Index {
 		this.current_track_style=this.storage.getItem('track-style') || 0
 	}
 
+	run() {
+		const params=getHashParams()
+		const error = params.error
+		location.hash=''
+        if(error) {
+			alert('There was an error during the authentication');
+			return
+		}
+		this.regist_eventListeners()
+
+		// access_token 更新期間
+		setInterval(()=>{ this.ajax_refresh_token() },1000*30)
+		this.ajax_refresh_token()
+
+		if(params.access_token){
+			this.access_token  = params.access_token
+			this.refresh_token = params.refresh_token
+			this.storage.setItem('access_token',this.access_token)
+			this.storage.setItem('refresh_token',this.refresh_token)
+
+		} else if(this.storage.getItem('access_token')) {
+			this.access_token  = this.storage.getItem('access_token')
+			this.refresh_token = this.storage.getItem('refresh_token')
+		}
+
+		if(this.storage.getItem('append-tag')) {
+			idE('append-tag').value=this.storage.getItem('append-tag')
+		}
+
+		if(!this.access_token) {
+			idShow('login'); idHide('loggedin')
+			return
+		} else {
+			idHide('login'); idShow('loggedin')
+		}
+		this.update_currently_playing()
+	}
+
 	ajax_currently_playing() {
 		return fetch('https://api.spotify.com/v1/me/player/currently-playing',{
 			headers: { 'Authorization': 'Bearer ' + this.access_token },
@@ -63,6 +101,58 @@ class Index {
 			mode: 'cors',
 		})
 		.then((r)=>{ return r.json() })
+	}
+
+	ajax_refresh_token() {
+		return fetch('/refresh_token',{
+			body: JSON.stringify({ 'refresh_token': this.refresh_token }),
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}
+		})
+		.then((r)=>{ return r.json() })
+		.then((r)=>{
+			this.access_token = r.access_token
+			this.storage.setItem('access_token',this.access_token)
+			return r
+		})
+	}
+
+	update_track_text() {
+		const append_tag = idE('append-tag').value ? ' '+idE('append-tag').value : ''
+		const comment=idE('comment-textarea').value
+		this.track_text=
+			( comment ? comment+"\n\n" : '' )
+			+this.track_styles[this.current_track_style](
+				Object.assign({
+					tags: '#ｽﾎﾟﾁﾊｲ'+append_tag,
+				},this.current_playing)		
+			)
+		idE('track-style').innerHTML=escapeHTML(this.track_text).replace(/\n/g,"<br>");
+	}
+
+	update_currently_playing() {
+		this.ajax_currently_playing()
+		.then((r)=>{
+			let artists=[]
+			for (var i in r.item.artists) {
+				artists.push(r.item.artists[i].name)
+			}
+			this.current_playing={
+				artist:  artists.join(', ',artists),
+				name:    r.item.name,
+				album:   r.item.album.name,
+				artwork: r.item.album.images[1].url,
+				url: r.item.external_urls.spotify
+			}
+			this.hb.currentlyPlaying(this.current_playing)
+			this.update_track_text()
+			if(DEBUG) {
+				this.hb.debug({ debug: JSON.stringify(r.item, null, 2) })
+			}
+		})
 	}
 
 	regist_eventListeners() {
@@ -116,76 +206,6 @@ class Index {
 				)
 			)
 		}, false)
-
-	}
-
-	update_track_text() {
-		const append_tag = idE('append-tag').value ? ' '+idE('append-tag').value : ''
-		const comment=idE('comment-textarea').value
-		this.track_text=
-			( comment ? comment+"\n\n" : '' )
-			+this.track_styles[this.current_track_style](
-				Object.assign({
-					tags: '#ｽﾎﾟﾁﾊｲ'+append_tag,
-				},this.current_playing)		
-			)
-		idE('track-style').innerHTML=escapeHTML(this.track_text).replace(/\n/g,"<br>");
-	}
-
-	update_currently_playing() {
-		this.ajax_currently_playing()
-		.then((r)=>{
-			let artists=[]
-			for (var i in r.item.artists) {
-				artists.push(r.item.artists[i].name)
-			}
-			this.current_playing={
-				artist:  artists.join(', ',artists),
-				name:    r.item.name,
-				album:   r.item.album.name,
-				artwork: r.item.album.images[1].url,
-				url: r.item.external_urls.spotify
-			}
-			this.hb.currentlyPlaying(this.current_playing)
-			this.update_track_text()
-			if(DEBUG) {
-				this.hb.debug({ debug: JSON.stringify(r.item, null, 2) })
-			}
-		})
-	}
-
-	run() {
-		const params=getHashParams()
-		const error = params.error
-		location.hash=''
-        if(error) {
-			alert('There was an error during the authentication');
-			return
-		}
-		this.regist_eventListeners()
-
-		if(params.access_token){
-			this.access_token  = params.access_token
-			this.refresh_token = params.refresh_token
-			this.storage.setItem('access_token',this.access_token)
-			this.storage.setItem('refresh_token',this.refresh_token)
-
-		} else if(this.storage.getItem('access_token')) {
-			this.access_token  = this.storage.getItem('access_token')
-			this.refresh_token = this.storage.getItem('refresh_token')
-		}
-
-		if(this.storage.getItem('append-tag')) {
-			idE('append-tag').value=this.storage.getItem('append-tag')
-		}
-
-		if(!this.access_token) {
-			idShow('login'); idHide('loggedin')
-			return
-		} else {
-			idHide('login'); idShow('loggedin')
-		}
-		this.update_currently_playing()
 	}
 }
 
