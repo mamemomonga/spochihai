@@ -68,7 +68,6 @@ class Index {
 
 		// access_token 更新期間
 		setInterval(()=>{ this.ajax_refresh_token() },1000*30)
-		this.ajax_refresh_token()
 
 		if(params.access_token){
 			this.access_token  = params.access_token
@@ -91,7 +90,9 @@ class Index {
 		} else {
 			idHide('login'); idShow('loggedin')
 		}
-		this.update_currently_playing()
+		this.ajax_refresh_token().then(()=>{
+			this.update_currently_playing()
+		})
 	}
 
 	ajax_currently_playing() {
