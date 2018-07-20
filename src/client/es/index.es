@@ -84,6 +84,12 @@ class Index {
 			idE('append-tag').value=this.storage.getItem('append-tag')
 		}
 
+		if(this.storage.getItem('mstdn-instance')) {
+			idE('mstdn-instance').value=this.storage.getItem('mstdn-instance')
+		} else {
+			idE('mstdn-instance').value='mstdn.jp'
+		}
+
 		if(!this.access_token) {
 			idShow('login'); idHide('loggedin')
 			return
@@ -157,12 +163,20 @@ class Index {
 	}
 
 	regist_eventListeners() {
+
 		idE('logout').addEventListener('click',()=>{
 			this.storage.removeItem('access_token')
 			this.storage.removeItem('refresh_token')
-//			this.storage.removeItem('append-tag')
-//			this.storage.removeItem('track-style')
+			this.storage.removeItem('append-tag')
+			this.storage.removeItem('track-style')
+			this.storage.removeItem('mstdn-instance')
 			location.href='/'
+		}, false)
+
+		idE('reconnect').addEventListener('click',()=>{
+			this.storage.removeItem('access_token')
+			this.storage.removeItem('refresh_token')
+			location.href='/login'
 		}, false)
 
 		idE('update').addEventListener('click',()=>{
@@ -171,7 +185,7 @@ class Index {
 
 		idE('toot').addEventListener('click',()=>{
 			const text=encodeURIComponent(this.track_text)
-			window.open('https://mstdn.jp/share?text='+text)
+			window.open('https://'+idE('mstdn-instance').value+'/share?text='+text)
 		}, false)
 
 		idE('track-style-change').addEventListener('click',()=>{
@@ -181,6 +195,10 @@ class Index {
 			}
 			this.update_track_text()
 			this.storage.setItem('track-style',this.current_track_style)
+		}, false)
+
+		idE('mstdn-instance').addEventListener('change',()=>{
+			this.storage.setItem('mstdn-instance',idE('mstdn-instance').value)
 		}, false)
 
 		idE('comment-textarea').addEventListener('change',()=>{

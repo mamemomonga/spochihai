@@ -42,18 +42,22 @@
 		<div id="track-style"></div>
 
 		<div style="margin-top: 20px">
-        <button class="btn btn-default" id="toot">mstdn.jpでトゥート</button>
+		<input type="text" id="mstdn-instance" placeholder="mstdn.jp"> で 
+        <button class="btn btn-default" id="toot">トゥート</button><br>
+		<a onClick="document.getElementById('mstdn-instance').value='mstdn.jp'">mstdn.jp</a> |
+		<a onClick="document.getElementById('mstdn-instance').value='don.mamemo.online'">don.mamemo.online</a>
 		</div>
 
 		<hr>
 
 		<div id="admin">
         <button class="btn btn-default" id="logout">ログアウト</button>
+        <button class="btn btn-default" id="reconnect">再接続</button>
 		</div>
 
 		<div id="debug"></div>
 	<hr>
-	<p>うまく動作しない場合は、一旦ログアウトしてください。</p>
+	<p>うまく動作しない場合は、「再接続」を押してしてください。</p>
       </div>
 
 	<hr>
