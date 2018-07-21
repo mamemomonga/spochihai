@@ -96,20 +96,24 @@ class Index {
 		} else {
 			idHide('login'); idShow('loggedin')
 		}
+
+		if(this.storage.getItem('trackinfo-us')) {
+			idE('trackinfo-us').checked=true
+		}
+
 		this.ajax_refresh_token().then(()=>{
 			this.update_currently_playing()
 		})
 	}
 
 	ajax_currently_playing() {
-		return fetch('https://api.spotify.com/v1/me/player/currently-playing',{
+		const query=this.storage.getItem('trackinfo-us') ? '?locale=en_US' : ''
+		return fetch(`https://api.spotify.com/v1/me/player/currently-playing${query}`,{
 			headers: { 'Authorization': 'Bearer ' + this.access_token },
-			method: 'GET',
-			mode: 'cors',
+			method: 'GET', mode: 'cors',
 		})
 		.then((r)=>{ return r.json() })
 	}
-
 	ajax_refresh_token() {
 		return fetch('/refresh_token',{
 			body: JSON.stringify({ 'refresh_token': this.refresh_token }),
@@ -141,23 +145,29 @@ class Index {
 	}
 
 	update_currently_playing() {
+
+		const artists_join=(a)=>{
+			let artists=[]
+			for (var i in a) { artists.push(a[i].name) }
+			return artists.join(', ',artists)
+		}
+
 		this.ajax_currently_playing()
 		.then((r)=>{
-			let artists=[]
-			for (var i in r.item.artists) {
-				artists.push(r.item.artists[i].name)
-			}
 			this.current_playing={
-				artist:  artists.join(', ',artists),
+				artist:  artists_join(r.item.artists),
 				name:    r.item.name,
 				album:   r.item.album.name,
 				artwork: r.item.album.images[1].url,
-				url: r.item.external_urls.spotify
+				url:     r.item.external_urls.spotify,
+				all:     r
 			}
+		})
+		.then(()=>{
 			this.hb.currentlyPlaying(this.current_playing)
 			this.update_track_text()
 			if(DEBUG) {
-				this.hb.debug({ debug: JSON.stringify(r.item, null, 2) })
+				this.hb.debug({ debug: JSON.stringify(this.current_playing.all.item, null, 2) })
 			}
 		})
 	}
@@ -170,6 +180,7 @@ class Index {
 			this.storage.removeItem('append-tag')
 			this.storage.removeItem('track-style')
 			this.storage.removeItem('mstdn-instance')
+			this.storage.removeItem('trackinfo-us')
 			location.href='/'
 		}, false)
 
@@ -211,8 +222,8 @@ class Index {
 		}, false)
 
 		idE('append-tag').addEventListener('change',()=>{
-			this.update_track_text()
 			this.storage.setItem('append-tag',idE('append-tag').value)
+			this.update_track_text()
 		}, false)
 
 		idE('search-google').addEventListener('click',()=>{
@@ -239,6 +250,10 @@ class Index {
 			} 
 		}, false)
 
+		idE('trackinfo-us').addEventListener('change',()=>{
+			this.storage.setItem('trackinfo-us',idE('append-tag').checked ? true : false )
+			this.update_currently_playing()
+		}, false)
 
 	}
 }
