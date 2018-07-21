@@ -107,7 +107,7 @@ class Index {
 	}
 
 	ajax_currently_playing() {
-		const query=this.storage.getItem('trackinfo-us') ? '?locale=en_US' : ''
+		const query=idE('trackinfo-us').checked ? '?locale=en_US' : ''
 		return fetch(`https://api.spotify.com/v1/me/player/currently-playing${query}`,{
 			headers: { 'Authorization': 'Bearer ' + this.access_token },
 			method: 'GET', mode: 'cors',
@@ -251,7 +251,11 @@ class Index {
 		}, false)
 
 		idE('trackinfo-us').addEventListener('change',()=>{
-			this.storage.setItem('trackinfo-us',idE('append-tag').checked ? true : false )
+			if(idE('trackinfo-us').checked) {
+				this.storage.setItem('trackinfo-us',true)
+			} else {
+				this.storage.removeItem('trackinfo-us')
+			}
 			this.update_currently_playing()
 		}, false)
 

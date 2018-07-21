@@ -29,11 +29,19 @@ http://localhost:8888/ でサーバが起動される。 CTRL+Cで終了
 
 	$ docker rm -f spochihai
 
-# .env ファイルを現在のシェルの環境変数として設定する方法
+# 開発時のTIPS
+
+## .env ファイルを現在のシェルの環境変数として設定する方法
 
 ローカル環境での開発時に便利です。
 
 	$ eval "$( cat .env | perl -E 'while(<>) { chomp; say "export $_" }' )" 
+
+## serverプロセスがdetachされたときにkillする方法
+
+エラーがでるとたまにdetachされてしまう
+
+	$ ps ax | grep 'node var/build/server.js' | grep -v 'grep' | awk '{ print $1 }' | xargs kill
 
 # License
 
