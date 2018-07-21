@@ -159,6 +159,7 @@ class Index {
 				name:    r.item.name,
 				album:   r.item.album.name,
 				artwork: r.item.album.images[1].url,
+				large_artwork: r.item.album.images[0].url,
 				url:     r.item.external_urls.spotify,
 				all:     r
 			}
