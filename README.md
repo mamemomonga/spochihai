@@ -2,32 +2,42 @@
 
 このアプリは、現在Spotifyで再生している曲をmstdn.jpで簡単にトゥートするためのツールです。
 
-# 設定と起動
+# 実行方法
 
-実行には、Dockerが必要です。
+## 環境
 
-	$ docker build -t spochihai .
+実行には、DockerおよびDocker Composeが必要です。
+
+	$ docker-compose build
 
 ## 設定
+
+.env を .env.example を参考にして編集します。
 
 Spotifyのトークンの取得方法は、[Spotify for Developers](https://developer.spotify.com/documentation/web-api/quick-start/)を参照。
 
 	$ cp .env.example .env
 	$ vim .env
 
-# 起動
+## 起動
 
-http://localhost:8888/ でサーバが起動される。 CTRL+Cで終了
+.envのSPCHI\_PORTで設定したポートでHTTPサーバが起動される。 CTRL+Cで終了
 
-	$ docker run --rm --env-file=.env -it -p 8888:8888 spochihai
+	$ docker-compose up
 
 以下の方法でバックグラウンド動作になる。
 
-	$ docker run --rm --env-file=.env -d --name=spochihai -p 8888:8888 spochihai
+	$ docker-compose up -d
 
 終了は以下の通り
 
-	$ docker rm -f spochihai
+	$ docker-compose down
+
+## アップデート
+
+最新版を git clone して docker-compose buildし再起動する。以下のスクリプトでも可能。
+
+	$ bin/update.sh
 
 # 開発時のTIPS
 
