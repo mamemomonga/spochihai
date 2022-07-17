@@ -13,6 +13,7 @@ import {
 } from '../../utils.es'
 
 const DEBUG=false
+const VERSION="1.0.2"
 
 // HandlerBar
 class HandleBarsUtil {
@@ -57,6 +58,7 @@ class Index {
 	}
 
 	run() {
+		console.log("version "+VERSION)
 		const params=getHashParams()
 		const error = params.error
 		location.hash=''
@@ -99,6 +101,10 @@ class Index {
 
 		if(this.storage.getItem('trackinfo-us')) {
 			idE('trackinfo-us').checked=true
+		}
+
+		if(this.storage.getItem('songwhip')) {
+			idE('songwhip').checked=true
 		}
 
 		this.ajax_refresh_token().then(()=>{
