@@ -140,7 +140,7 @@ gulp.task('build:assets',()=>{
 	]).pipe(gulp.dest('var/build/public'))
 })
 
-gulp.task('build',gulp.parallel(
+gulp.task('build',gulp.series(
 	'build:server',
 	'build:sass',
 	'build:client-index',

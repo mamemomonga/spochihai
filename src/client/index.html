@@ -30,6 +30,9 @@
 		<input type="checkbox" id="trackinfo-us" name="trackinfo-us">
 		<label for="trackinfo-us">トラック情報を英語で取得</label><br>
 
+		<input type="checkbox" id="songwhip" name="songwhip">
+		<label for="songwhip">songwhip.comを経由する</label><br>
+
         <button class="btn btn-default" id="update">更新</button>
 		<input type="checkbox" id="auto-update" name="auto-update">
 		<label for="auto-update">自動更新</label>
@@ -57,10 +60,14 @@
         <button class="btn btn-default" id="toot">トゥート</button>
 		&nbsp;&nbsp;&nbsp;または&nbsp;
         <button class="btn btn-default" id="tweet">ツイート</button>
-			<br>
+		<br>
+		<div class="mstdn-instances">
+		<a onClick="document.getElementById('mstdn-instance').value='don.mamemo.online'">don.mamemo.online</a> |
+		<a onClick="document.getElementById('mstdn-instance').value='fedibird.com'">fedibird.com</a> |
 		<a onClick="document.getElementById('mstdn-instance').value='mstdn.jp'">mstdn.jp</a> |
-		<a onClick="document.getElementById('mstdn-instance').value='don.mamemo.online'">don.mamemo.online</a>
-
+		<a onClick="document.getElementById('mstdn-instance').value='pawoo.net'">pawoo.net</a> |
+		<a onClick="document.getElementById('mstdn-instance').value='best-friends.chat'">best-friends.chat</a>
+		</div>
 		</div>
 
 		<hr>

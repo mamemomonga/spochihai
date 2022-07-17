@@ -1,4 +1,4 @@
-FROM node:9-alpine
+FROM node:14-alpine
 
 RUN set -xe && \
 	apk --update add tzdata && \

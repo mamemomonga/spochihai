@@ -32,7 +32,7 @@ body {
 
 table {
 	height: 178px;
-	width: 350px;
+	width: 500px;
 	font-size: 12pt;
 	line-height: 12pt;
 }
@@ -76,7 +76,8 @@ p {
 	border: 1px solid #000000;
 	padding: 20px;
 	font-weight: bold;
-	margin: 10px 0 30px 30px;
+	// margin: 10px 0 30px 30px;
+	margin: 20px 0 10px 0;
 	width: 700px;
 }
 
@@ -90,4 +91,6 @@ p {
 	width: 200px;
 }
 
-
+.mstdn-instances {
+	cursor: pointer;
+}

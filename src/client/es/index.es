@@ -152,15 +152,15 @@ class Index {
 			return artists.join(', ',artists)
 		}
 
-		this.ajax_currently_playing()
-		.then((r)=>{
+		this.ajax_currently_playing().then((r)=>{
+			const url=(idE('songwhip').checked ? 'https://songwhip.com/' : '') + r.item.external_urls.spotify
 			this.current_playing={
 				artist:  artists_join(r.item.artists),
 				name:    r.item.name,
 				album:   r.item.album.name,
 				artwork: r.item.album.images[1].url,
 				large_artwork: r.item.album.images[0].url,
-				url:     r.item.external_urls.spotify,
+				url:     url,
 				all:     r
 			}
 		})
@@ -256,6 +256,15 @@ class Index {
 				this.storage.setItem('trackinfo-us',true)
 			} else {
 				this.storage.removeItem('trackinfo-us')
+			}
+			this.update_currently_playing()
+		}, false)
+
+		idE('songwhip').addEventListener('change',()=>{
+			if(idE('songwhip').checked) {
+				this.storage.setItem('songwhip',true)
+			} else {
+				this.storage.removeItem('songwhip')
 			}
 			this.update_currently_playing()
 		}, false)
