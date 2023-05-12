@@ -275,6 +275,26 @@ class Index {
 			this.update_currently_playing()
 		}, false)
 
+		idE('copy-to-clipboard').addEventListener('click',()=>{
+			const rcv=()=>{
+				setTimeout(()=>{
+					idE('copy-to-clipboard').innerText="コピー"
+					idE('copy-to-clipboard').disabled=false
+				},5000)
+			}	
+
+			navigator.clipboard.writeText(this.track_text).then(
+				()=>{
+					idE('copy-to-clipboard').innerText="コピー成功"
+					idE('copy-to-clipboard').disabled=true
+					rcv()
+				},()=>{
+					idE('copy-to-clipboard').innerText="コピー失敗"
+					idE('copy-to-clipboard').disabled=true
+					rcv()
+				}
+			)
+		},false)
 	}
 }
 

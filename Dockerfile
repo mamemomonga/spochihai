@@ -9,7 +9,8 @@ RUN set -xe && \
 	rm -rf /var/cache/apk/*
 
 RUN set -xe && \
-	apk --update add su-exec && \
+	apk --update add su-exec make g++ && \
+	apk add --no-chache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main python2~=2.7 && \
 	rm -rf /var/cache/apk/*
 
 RUN set -xe && \
