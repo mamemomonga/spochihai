@@ -63,29 +63,30 @@
 		<h2>投稿</h2>
 		<table class="post-select">
 			<tr>
-				<td colspan="2">
-				<button class="btn btn-default" id="copy-to-clipboard">コピー</button> </td>
+				<th>clipboard</th>
+				<td><button class="btn btn-default" id="copy-to-clipboard">コピー</button></td>
 			</tr><tr>
-				<td>mastodon</td>
+				<th>mastodon</th>
 				<td>
 				<input type="text" id="mstdn-instance" placeholder="mstdn.jp"> で 
-		        <button class="btn btn-default" id="toot">トゥート</button>
+		        <button class="btn btn-default" id="toot">トゥート</button><br/>
 				<div class="mstdn-instances">
 					<a onClick="document.getElementById('mstdn-instance').value='don.mamemo.online'">don.mamemo.online</a> |
 					<a onClick="document.getElementById('mstdn-instance').value='fedibird.com'">fedibird.com</a> |
+					<a onClick="document.getElementById('mstdn-instance').value='mastodon-japan.net'">mastodon-japan.net</a> |
 					<a onClick="document.getElementById('mstdn-instance').value='mstdn.jp'">mstdn.jp</a> |
 					<a onClick="document.getElementById('mstdn-instance').value='pawoo.net'">pawoo.net</a> |
 					<a onClick="document.getElementById('mstdn-instance').value='best-friends.chat'">best-friends.chat</a>
 				</div></td>
 			</tr><tr>
-				<td>twitter</td>
+				<th>twitter</th>
 				<td>
         			<button class="btn btn-default" id="tweet">ツイート</button>
 				</td>
 			</tr><tr>
-				<td>bluesky</td>
+				<th>bluesky</th>
 				<td>
-        			<button class="btn btn-default" id="skeet">ポスト</button>
+        			<button class="btn btn-default" id="skeet">ポスト</button> (<a href="https://mdrv.shino3.net/">Mass Driver</a>を経由します)
 				</td>
 			</tr>
 		</table>
