@@ -30,21 +30,44 @@ body {
   width: 500px;
 }
 
-table {
+table.currently-playing {
 	height: 178px;
 	width: 500px;
 	font-size: 12pt;
 	line-height: 12pt;
 }
-
-table td {
+table.currently-playing td {
 	border: 1px solid #000000;
 	border-collapse: collapse;
 	padding: 10px;
 	vertical-align: middle;
 	text-align: left;
 }
-table th {
+table.currently-playing th {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	padding: 10px;
+	vertical-align: middle;
+	text-align: center;
+	background-color: #DDDDDD;
+}
+
+
+table.post-select {
+	width: 500px;
+	font-size: 12pt;
+	line-height: 12pt;
+}
+
+table.post-select td {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	padding: 10px;
+	vertical-align: middle;
+	text-align: left;
+}
+
+table.post-select th {
 	border: 1px solid #000000;
 	border-collapse: collapse;
 	padding: 10px;

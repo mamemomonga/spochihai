@@ -211,6 +211,11 @@ class Index {
 			window.open('https://twitter.com/intent/tweet?text='+text)
 		}, false)
 
+		idE('skeet').addEventListener('click',()=>{
+			const text=encodeURIComponent(this.track_text)
+			window.open('https://mdrv.shino3.net?intent='+text)
+		}, false)
+
 		idE('track-style-change').addEventListener('click',()=>{
 			this.current_track_style++
 			if(this.track_styles.length == this.current_track_style ) {
@@ -285,6 +290,7 @@ class Index {
 
 			navigator.clipboard.writeText(this.track_text).then(
 				()=>{
+					console.log("do_copy")
 					idE('copy-to-clipboard').innerText="コピー成功"
 					idE('copy-to-clipboard').disabled=true
 					rcv()
