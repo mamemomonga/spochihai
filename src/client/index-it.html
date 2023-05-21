@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>#ｽﾎﾟﾁﾊｲ</title>
+		<script src="/index.js"></script>
+		<script src="/handlebars.min.js"></script>
+		<link rel="stylesheet" href="/base.css">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	</head>
+
+	<body>
+		<div class="container">
+			<h1>#ｽﾎﾟﾁﾊｲ (spochihai) Spotify</h1>
+			<p>#ｽﾎﾟﾁﾊｲ #spotify strumento per tag e tweet</p>
+			<p>
+				<a href="https://mstdn.jp/" target="_blank">mstdn.jp</a> |
+				<a href="https://mstdn.jp/tags/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank">#ｽﾎﾟﾁﾊｲ</a>, 
+				<a href="https://twitter.com/" target="_blank">twitter.com</a> | 
+				<a href="https://twitter.com/hashtag/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2?src=hash" target="_blank">#ｽﾎﾟﾁﾊｲ</a>
+			</p>
+			<a href="/">日本語</a>
+			<hr>
+			<div id="login">
+				<a href="/login" class="btn btn-primary">Connessione a Spotify</a>
+			</div>
+
+			<div id="loggedin">
+				<h2>Ascoltando</h2>
+				<div id="currently-playing"></div>
+
+				<input type="checkbox" id="trackinfo-us" name="trackinfo-us">
+				<label for="trackinfo-us">Ottieni informazioni sul brano, in inglese</label>
+				<br>
+
+				<input type="checkbox" id="songwhip" name="songwhip">
+				<label for="songwhip">Tramite songwhip.com</label>
+				<br>
+
+				<button class="btn btn-default" id="update">Aggiornamento</button>
+				<input type="checkbox" id="auto-update" name="auto-update">
+				<label for="auto-update">automatico</label>
+				<button class="btn btn-default" id="search-google">Cerca su Google</button>
+				<button class="btn btn-default" id="search-youtube">Cerca su YouTube</button>
+				
+				<div>
+					<h2>Commento</h2>
+					<textarea id="comment-textarea"></textarea>
+				</div>
+
+				<div>
+					<h2>Hashtag aggiuntivi</h2>
+					<input type="text" id="append-tag" placeholder="#まめもなうぷれ #nowplaying">
+				</div>
+
+				<h2>Stile</h2>
+				<button class="btn btn-default" id="track-style-change">Cambiare</button>
+				<div id="track-style"></div>
+
+				<div style="margin-top: 20px">
+					<input type="text" id="mstdn-instance" placeholder="orwell.fun"> E 
+					<button class="btn btn-default" id="toot">Toota</button>
+					oppure
+					<button class="btn btn-default" id="tweet">Twitta</button>
+					<br>
+					<div class="mstdn-instances">
+						<a onClick="document.getElementById('mstdn-instance').value='recordon.mamemo.online'">recordon.mamemo.online</a> |
+						<a onClick="document.getElementById('mstdn-instance').value='don.mamemo.online'">don.mamemo.online</a> |
+						<a onClick="document.getElementById('mstdn-instance').value='orwell.fun'">Orwell Fun Community</a> |
+						<a onClick="document.getElementById('mstdn-instance').value='fedibird.com'">fedibird.com</a> |
+						<a onClick="document.getElementById('mstdn-instance').value='mstdn.jp'">mstdn.jp</a> |
+						<a onClick="document.getElementById('mstdn-instance').value='pawoo.net'">pawoo.net</a> |
+						<a onClick="document.getElementById('mstdn-instance').value='best-friends.chat'">best-friends.chat</a>
+					</div>
+				</div>
+
+				<hr>
+
+				<div id="admin">
+					<button class="btn btn-default" id="logout">Disconnetti</button>
+					<button class="btn btn-default" id="reconnect">Riconnetti</button>
+				</div>
+
+				<div id="debug"></div>
+				<hr>
+				<p>Se smette di funzionare, premere «riconnetti»</p>
+			</div>
+
+			<hr>
+
+			<p>
+				Codice sorgente: <a href="https://github.com/mamemomonga/spochihai" target="_blank">GitHub</a>
+				|
+				Autore: mamemomonga
+			</p>
+
+		</div><!-- Fine Div Container -->
+
+		<script id="currently-playing-template" type="text/x-handlebars-template">
+			<div style="padding: 0 10px 0 0; float:left"><a href="{{large_artwork}}" target="spochihai_artwork"><img src="{{artwork}}" class="artwork"></a></div>
+			<table>
+			<tr><th>Track</th><td>{{name}}</td></tr>
+			<tr><th>Artist</th><td>{{artist}}</td></tr>
+			<tr><th>Album</th><td>{{album}}</td></tr>
+			<tr><th>URL</th><td><a href="{{url}}" target="_blank">{{url}}</a></td></tr>
+			</table>
+			<div class="clearfix"></div>
+		</script>
+		<script id="debug-template" type="text/x-handlebars-template">
+			<h2>Debug</h2>
+			<pre>{{debug}}</pre>
+		</script>
+
+	</body>
+</html>
