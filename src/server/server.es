@@ -1,10 +1,8 @@
 import express from 'express'
-import request from 'request'
 import cors from 'cors'
-import querystring from 'querystring'
 import cookieParser from 'cookie-parser'
-import { generateRandomString } from '../utils.es'
 import bodyParser from 'body-parser'
+import { generateRandomString } from '../utils.es'
 
 const configs={
 	client_id:     process.env.SPCHI_CLIENT_ID,
@@ -26,13 +24,13 @@ app.get('/login',(req,res)=>{
 	res.cookie(stateKey,state)
 	const scope = 'user-read-currently-playing'
 	res.redirect('https://accounts.spotify.com/authorize?' +
-		querystring.stringify({
+		new URLSearchParams({
 			response_type: 'code',
 			client_id: configs.client_id,
 			scope: scope,
 			redirect_uri: configs.redirect_uri,
 			state: state
-		})
+		}).toString()
 	)
 })
 
@@ -42,54 +40,60 @@ app.get('/callback',(req,res)=>{
   const storedState = req.cookies ? req.cookies[stateKey] : null
 
 	if (state === null || state !== storedState) {
-		res.redirect('/#' + querystring.stringify({ error: 'state_mismatch' }))
+		res.redirect('/#' + new URLSearchParams({ error: 'state_mismatch' }).toString())
 	} else {
 		res.clearCookie(stateKey)
-		const authOptions = {
-			url: 'https://accounts.spotify.com/api/token',
-			form: {
+		const authHeader = 'Basic ' + Buffer.from(configs.client_id + ':' + configs.client_secret).toString('base64')
+
+		fetch('https://accounts.spotify.com/api/token', {
+			method: 'POST',
+			headers: {
+				'Authorization': authHeader,
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: new URLSearchParams({
 				code: code,
 				redirect_uri: configs.redirect_uri,
 				grant_type: 'authorization_code'
-			},
-			headers: {
-			  'Authorization': 'Basic ' + (new Buffer(configs.client_id + ':' + configs.client_secret).toString('base64'))
-			},
-			json: true
-		}
-		request.post(authOptions, (error, response, body)=>{
-			if (!error && response.statusCode === 200) {
-			const access_token = body.access_token
-			const refresh_token = body.refresh_token
-			res.redirect('/#' + querystring.stringify({
-				access_token: access_token,
-				refresh_token: refresh_token
-			}))
-		} else {
-			res.redirect('/#' + querystring.stringify({ error: 'invalid_token' }))
-		}
-	})
+			})
+		})
+		.then(async (response)=>{
+			const body = await response.json()
+			if (response.ok) {
+				res.redirect('/#' + new URLSearchParams({
+					access_token: body.access_token,
+					refresh_token: body.refresh_token
+				}).toString())
+			} else {
+				res.redirect('/#' + new URLSearchParams({ error: 'invalid_token' }).toString())
+			}
+		})
+		.catch(()=>{
+			res.redirect('/#' + new URLSearchParams({ error: 'invalid_token' }).toString())
+		})
   }
 })
 
 app.post('/refresh_token', (req, res)=>{
 	const refresh_token = req.body.refresh_token
-	const authOptions = {
-		url: 'https://accounts.spotify.com/api/token',
+	const authHeader = 'Basic ' + Buffer.from(configs.client_id + ':' + configs.client_secret).toString('base64')
+
+	fetch('https://accounts.spotify.com/api/token', {
+		method: 'POST',
 		headers: {
-			'Authorization': 'Basic ' + (new Buffer(configs.client_id + ':' + configs.client_secret).toString('base64'))
+			'Authorization': authHeader,
+			'Content-Type': 'application/x-www-form-urlencoded'
 		},
-		form: {
+		body: new URLSearchParams({
 			grant_type: 'refresh_token',
 			refresh_token: refresh_token
-		},
-		json: true
-  }
-  request.post(authOptions, (error, response, body)=>{
-		if (!error && response.statusCode === 200) {
-			const access_token = body.access_token
+		})
+	})
+	.then(async (response)=>{
+		if (response.ok) {
+			const body = await response.json()
 			res.send({
-				'access_token': access_token
+				'access_token': body.access_token
 			})
 		}
 	})
@@ -98,4 +102,3 @@ app.post('/refresh_token', (req, res)=>{
 const serve_port=process.env.SERVE_PORT ? process.env.SERVE_PORT : 8888
 console.log(`Listening on ${serve_port}`)
 app.listen(serve_port)
-

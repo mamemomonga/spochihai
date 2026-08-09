@@ -4,10 +4,13 @@
 import gulp           from 'gulp'
 import log            from 'fancy-log'
 import webpack        from 'webpack-stream'
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
-import sass           from 'gulp-sass'
+import TerserPlugin   from 'terser-webpack-plugin'
+import dartSass       from 'sass'
+import gulpSass       from 'gulp-sass'
 import htmlmin        from 'gulp-htmlmin'
 import gls            from 'gulp-live-server'
+
+const sass = gulpSass(dartSass)
 
 // gulp-utilは終了しました
 // https://medium.com/gulpjs/gulp-util-ca3b1f9f9ac5
@@ -29,10 +32,12 @@ const webpacks=(()=>{
 			node: {
 				__dirname: false,
 				__filename: false,
-				process: false,
 			},
 			devtool: DEVELOPMENT ? 'source-map' : undefined,
-			plugins: DEVELOPMENT ? undefined : [ new UglifyJSPlugin() ],
+			optimization: DEVELOPMENT ? undefined : {
+				minimize: true,
+				minimizer: [ new TerserPlugin() ]
+			},
 			mode: DEVELOPMENT ? 'development' : 'production',
 			module: { rules: [{
 				test: /\.es$/,
@@ -40,7 +45,7 @@ const webpacks=(()=>{
 					loader: 'babel-loader',
 					options: {
 						presets: [
-							[ "babel-preset-env", args.preset_env ]
+							[ "@babel/preset-env", args.preset_env ]
 						]
 					}
 				}
@@ -60,13 +65,11 @@ const webpacks=(()=>{
 				server: true,
 				filename: filename,
 				// node.jsのバージョン
-				preset_env: { targets: { "node": "8.0" }},
+				preset_env: { targets: { "node": "20" }},
 				// 埋め込まないモジュール
 				externals: [
 					'express',
-					'request',
 					'cors',
-					'querystring',
 					'cookie-parser',
 					'body-parser',
 				]
@@ -186,4 +189,3 @@ gulp.task('serve',gulp.series(
 	'build',
 	'serve:serve'
 ))
-

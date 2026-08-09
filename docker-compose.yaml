@@ -1,13 +1,11 @@
-version: '3'
-
 # networks:
-#     default: { external: { name: 'myapplication' }}
+#     default: { name: 'myapplication', external: true }
 
 services:
   web:
     build: .
     restart: always
+    init: true
     env_file: .env
     ports:
-        - '127.0.0.1:${SPCHI_PORT}:8888'
-
+      - '127.0.0.1:${SPCHI_PORT}:8888'
