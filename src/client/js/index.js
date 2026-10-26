@@ -57,10 +57,6 @@ class Index {
 			idE('trackinfo-us').checked=true
 		}
 
-		if(this.storage.getItem('songwhip')) {
-			idE('songwhip').checked=true
-		}
-
 		// アクセストークンはメモリ上にのみ保持する
 		if(!await this.ajax_refresh_token()) {
 			idShow('login'); idHide('loggedin')
@@ -159,7 +155,7 @@ class Index {
 			album:   item.album ? item.album.name : '',
 			artwork: (images[1] || images[0] || {}).url,
 			large_artwork: (images[0] || {}).url,
-			url:     (idE('songwhip').checked ? 'https://songwhip.com/' : '') + spotify_url,
+			url:     spotify_url,
 		}
 		this.render_currently_playing()
 		this.update_track_text()
@@ -180,7 +176,6 @@ class Index {
 			this.storage.removeItem('track-style')
 			this.storage.removeItem('mstdn-instance')
 			this.storage.removeItem('trackinfo-us')
-			this.storage.removeItem('songwhip')
 			location.href='/'
 		}, false)
 
@@ -259,15 +254,6 @@ class Index {
 				this.storage.setItem('trackinfo-us',true)
 			} else {
 				this.storage.removeItem('trackinfo-us')
-			}
-			this.update_currently_playing()
-		}, false)
-
-		idE('songwhip').addEventListener('change',()=>{
-			if(idE('songwhip').checked) {
-				this.storage.setItem('songwhip',true)
-			} else {
-				this.storage.removeItem('songwhip')
 			}
 			this.update_currently_playing()
 		}, false)
