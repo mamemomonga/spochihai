@@ -8,7 +8,7 @@ set -x
 cd $BASEDIR
 git fetch origin $BRANCH
 git checkout $BRANCH
-docker-compose build
-docker-compose down
-docker-compose up -d
+docker compose build
+docker compose down
+docker compose up -d
 

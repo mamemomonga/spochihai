@@ -1,5 +1,5 @@
 // vim:ft=css
-@import "./_reset";
+@use "reset";
 
 html {
 	height: 100%;
@@ -86,6 +86,11 @@ table.post-select th {
 	padding: 10px;
 }
 
+.artwork-box {
+	padding: 0 10px 0 0;
+	float: left;
+}
+
 #comment-textarea {
 	width: 700px;
 	height: 100px;
@@ -99,6 +104,8 @@ p {
 	border: 1px solid #000000;
 	padding: 20px;
 	font-weight: bold;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
 	// margin: 10px 0 30px 30px;
 	margin: 20px 0 10px 0;
 	width: 700px;
@@ -118,4 +125,82 @@ p {
 	cursor: pointer;
 	width: 600px;
 	font-size: 10pt;
+}
+
+// ---- 旧Bootstrap 3 から利用していたスタイル ----
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #333333;
+}
+
+.container {
+	margin: 0 auto;
+	padding: 0 15px;
+	max-width: 100%;
+}
+
+h1, h2 {
+	font-weight: 500;
+	line-height: 1.1;
+	margin: 20px 0 10px 0;
+}
+h1 { font-size: 36px; }
+h2 { font-size: 30px; }
+
+p { margin: 0 0 10px 0; }
+
+a {
+	color: #428bca;
+	text-decoration: none;
+	&:hover { text-decoration: underline; }
+}
+
+hr {
+	margin: 20px 0;
+	border: 0;
+	border-top: 1px solid #eeeeee;
+}
+
+input, textarea, button {
+	font: inherit;
+}
+
+.clearfix::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.btn {
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	&:disabled {
+		cursor: not-allowed;
+		opacity: .65;
+	}
+}
+
+.btn-default {
+	color: #333333;
+	background-color: #ffffff;
+	border-color: #cccccc;
+	&:hover:not(:disabled) { background-color: #ebebeb; border-color: #adadad; }
+}
+
+.btn-primary {
+	color: #ffffff;
+	background-color: #428bca;
+	border-color: #357ebd;
+	&:hover { background-color: #3071a9; border-color: #285e8e; text-decoration: none; }
 }

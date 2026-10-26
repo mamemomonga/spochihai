@@ -2,11 +2,10 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>#ｽﾎﾟﾁﾊｲ</title>
-	<script src="/index.js"></script>
-	<script src="/handlebars.min.js"></script>
+	<script src="/index.js" defer></script>
 	<link rel="stylesheet" href="/base.css">
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -14,8 +13,9 @@
     <h1>#ｽﾎﾟﾁﾊｲ</h1>
 		<p>#ｽﾎﾟﾁﾊｲ タグをつけて、トゥートやツイートするツールです。</p>
 	<p>
-		<a href="https://mstdn.jp/" target="_blank">mstdn.jp</a> | <a href="https://mstdn.jp/tags/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank">#ｽﾎﾟﾁﾊｲ</a>, 
-		<a href="https://twitter.com/" target="_blank">twitter.com</a> | <a href="https://twitter.com/hashtag/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2?src=hash" target="_blank">#ｽﾎﾟﾁﾊｲ</a><br>
+		<a href="https://mstdn.jp/" target="_blank" rel="noopener noreferrer">mstdn.jp</a> | <a href="https://mstdn.jp/tags/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank" rel="noopener noreferrer">#ｽﾎﾟﾁﾊｲ</a>, 
+		<a href="https://twitter.com/" target="_blank" rel="noopener noreferrer">twitter.com</a> | <a href="https://twitter.com/hashtag/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2?src=hash" target="_blank" rel="noopener noreferrer">#ｽﾎﾟﾁﾊｲ</a>,
+		<a href="https://bsky.app/" target="_blank" rel="noopener noreferrer">bsky.app</a> | <a href="https://bsky.app/hashtag/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank" rel="noopener noreferrer">#ｽﾎﾟﾁﾊｲ</a><br>
 	</p>
 	<hr>
       <div id="login">
@@ -71,12 +71,12 @@
 				<input type="text" id="mstdn-instance" placeholder="mstdn.jp"> で 
 		        <button class="btn btn-default" id="toot">トゥート</button><br/>
 				<div class="mstdn-instances">
-					<a onClick="document.getElementById('mstdn-instance').value='don.mamemo.online'">don.mamemo.online</a> |
-					<a onClick="document.getElementById('mstdn-instance').value='fedibird.com'">fedibird.com</a> |
-					<a onClick="document.getElementById('mstdn-instance').value='mastodon-japan.net'">mastodon-japan.net</a> |
-					<a onClick="document.getElementById('mstdn-instance').value='mstdn.jp'">mstdn.jp</a> |
-					<a onClick="document.getElementById('mstdn-instance').value='pawoo.net'">pawoo.net</a> |
-					<a onClick="document.getElementById('mstdn-instance').value='best-friends.chat'">best-friends.chat</a>
+					<a data-instance="don.mamemo.online">don.mamemo.online</a> |
+					<a data-instance="fedibird.com">fedibird.com</a> |
+					<a data-instance="mastodon-japan.net">mastodon-japan.net</a> |
+					<a data-instance="mstdn.jp">mstdn.jp</a> |
+					<a data-instance="pawoo.net">pawoo.net</a> |
+					<a data-instance="best-friends.chat">best-friends.chat</a>
 				</div></td>
 			</tr><tr>
 				<th>twitter</th>
@@ -86,7 +86,7 @@
 			</tr><tr>
 				<th>bluesky</th>
 				<td>
-        			<button class="btn btn-default" id="skeet">ポスト</button> (<a href="https://mdrv.shino3.net/">Mass Driver</a>を経由します)
+        			<button class="btn btn-default" id="skeet">ポスト</button>
 				</td>
 			</tr>
 		</table>
@@ -107,28 +107,11 @@
 	<hr>
 
 	<p>
-	ソースコードは<a href="https://github.com/mamemomonga/spochihai" target="_blank">こちら</a> |
+	ソースコードは<a href="https://github.com/mamemomonga/spochihai" target="_blank" rel="noopener noreferrer">こちら</a> |
 	制作: mamemomonga
 	</p>
 
     </div>
 
 </body>
-
-<script id="currently-playing-template" type="text/x-handlebars-template">
-	<div style="padding: 0 10px 0 0; float:left"><a href="{{large_artwork}}" target="spochihai_artwork"><img src="{{artwork}}" class="artwork"></a></div>
-	<table class="currently-playing">
-	<tr><th>Track</th><td>{{name}}</td></tr>
-	<tr><th>Artist</th><td>{{artist}}</td></tr>
-	<tr><th>Album</th><td>{{album}}</td></tr>
-	<tr><th>URL</th><td><a href="{{url}}" target="_blank">{{url}}</a></td></tr>
-	</table>
-	<div class="clearfix"></div>
-</script>
-
-<script id="debug-template" type="text/x-handlebars-template">
-  <h2>Debug</h2>
-  <pre>{{debug}}</pre>
-</script>
-
 </html>
