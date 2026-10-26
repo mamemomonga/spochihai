@@ -58,6 +58,16 @@ Node.js 24 以降が必要です。
 
 `npm run build` でクライアントをビルドし、`npm start` でサーバを起動します。
 
+## 多言語対応
+
+英語・日本語・イタリア語に対応しています。ブラウザの言語設定が日本語またはイタリア語ならその言語で、それ以外は英語で表示します。画面右上のメニューで言語を固定でき、その設定はログアウトするまで有効です。
+
+文言は [src/client/js/locales/](src/client/js/locales/) に言語ごとのファイルで管理しています。
+
+* 文言の修正: `locales/*.js` の該当キーの文字列を編集します。他の言語に無いキーは英語(`en.js`)の文言が使われます。
+* 文言の追加: `en.js` と各言語のファイルにキーを追加し、HTMLでは `data-i18n="キー"` (テキスト) または `data-i18n-placeholder="キー"` (placeholder) を、JSでは `t('キー')` を使います。
+* 言語の追加: `locales/` に `en.js` をコピーして翻訳し、[src/client/js/i18n.js](src/client/js/i18n.js) の `locales` に加えます。
+
 # License
 
 MIT

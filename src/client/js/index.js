@@ -10,6 +10,12 @@ import {
 	isHostname,
 	openWindow
 } from './utils.js'
+import {
+	t,
+	translatePage,
+	setupLangMenu,
+	LANG_STORAGE_KEY
+} from './i18n.js'
 
 const DEBUG=false
 const VERSION="2.0.0"
@@ -23,7 +29,7 @@ const track_styles=[
 class Index {
 	constructor() {
 		if(typeof localStorage == 'undefined') {
-			window.alert("このブラウザではWebStorageが利用できません");
+			window.alert(t('error.no_storage'))
 			return
 		}
 		this.storage = localStorage
@@ -43,8 +49,10 @@ class Index {
 			history.replaceState(null, '', location.pathname + location.search)
 		}
 		if(params.error) {
-			alert('There was an error during the authentication');
+			alert(t('error.auth'))
 		}
+		setupLangMenu(idE('lang-select'), ()=>this.render_currently_playing())
+		translatePage()
 		this.regist_eventListeners()
 
 		if(this.storage.getItem('append-tag')) {
@@ -114,25 +122,25 @@ class Index {
 	}
 
 	render_currently_playing() {
-		const t=this.current_playing
+		const track=this.current_playing
 		const placeholder=idE('currently-playing')
-		if(!t) {
-			placeholder.replaceChildren(el('p',{},'再生中の曲がありません'))
+		if(!track) {
+			placeholder.replaceChildren(el('p',{},t('playing.none')))
 			return
 		}
 		const row=(name, ...value)=>el('tr',{},el('th',{},name),el('td',{},...value))
-		const url=safeURL(t.url)
-		const artwork=safeURL(t.artwork)
-		const large_artwork=safeURL(t.large_artwork)
+		const url=safeURL(track.url)
+		const artwork=safeURL(track.artwork)
+		const large_artwork=safeURL(track.large_artwork)
 		placeholder.replaceChildren(
 			el('div',{ class: 'artwork-box' },
 				artwork ? el('a',{ href: large_artwork || artwork, target: '_blank', rel: 'noopener noreferrer' },
 					el('img',{ src: artwork, class: 'artwork', alt: '' })) : ''
 			),
 			el('table',{ class: 'currently-playing' },
-				row('Track',  t.name),
-				row('Artist', t.artist),
-				row('Album',  t.album),
+				row(t('playing.track'),  track.name),
+				row(t('playing.artist'), track.artist),
+				row(t('playing.album'),  track.album),
 				row('URL', url ? el('a',{ href: url, target: '_blank', rel: 'noopener noreferrer' }, url) : '')
 			),
 			el('div',{ class: 'clearfix' })
@@ -176,6 +184,7 @@ class Index {
 			this.storage.removeItem('track-style')
 			this.storage.removeItem('mstdn-instance')
 			this.storage.removeItem('trackinfo-us')
+			this.storage.removeItem(LANG_STORAGE_KEY)
 			location.href='/'
 		}, false)
 
@@ -190,7 +199,7 @@ class Index {
 		idE('toot').addEventListener('click',()=>{
 			const instance=idE('mstdn-instance').value.trim()
 			if(!isHostname(instance)) {
-				alert('インスタンス名が正しくありません')
+				alert(t('error.instance'))
 				return
 			}
 			openWindow('https://'+instance+'/share?text='+this.share_query())
@@ -264,13 +273,13 @@ class Index {
 				btn.textContent=label
 				btn.disabled=true
 				setTimeout(()=>{
-					btn.textContent="コピー"
+					btn.textContent=t('post.copy')
 					btn.disabled=false
 				},5000)
 			}
 			navigator.clipboard.writeText(this.track_text || '').then(
-				()=>done("コピー成功"),
-				()=>done("コピー失敗")
+				()=>done(t('post.copy_ok')),
+				()=>done(t('post.copy_ng'))
 			)
 		},false)
 	}

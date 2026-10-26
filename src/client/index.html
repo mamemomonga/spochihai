@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html>
+<!--
+	文言は src/client/js/locales/*.js で言語ごとに管理しています。
+	data-i18n="キー" の要素はテキストが、data-i18n-placeholder="キー" の要素は placeholder が置き換わります。
+	ここに書いてある文言は翻訳前の表示(英語)です。
+-->
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,63 +15,69 @@
 
 <body>
     <div class="container">
+	<div id="lang-menu">
+		<label for="lang-select" data-i18n="lang.label">Language</label>
+		<select id="lang-select"></select>
+	</div>
     <h1>#ｽﾎﾟﾁﾊｲ</h1>
-		<p>#ｽﾎﾟﾁﾊｲ タグをつけて、トゥートやツイートするツールです。</p>
+		<p data-i18n="app.description">A tool to share the track you are playing on Spotify with the #ｽﾎﾟﾁﾊｲ tag.</p>
 	<p>
-		<a href="https://mstdn.jp/" target="_blank" rel="noopener noreferrer">mstdn.jp</a> | <a href="https://mstdn.jp/tags/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank" rel="noopener noreferrer">#ｽﾎﾟﾁﾊｲ</a>, 
+		<a href="https://mstdn.jp/" target="_blank" rel="noopener noreferrer">mstdn.jp</a> | <a href="https://mstdn.jp/tags/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank" rel="noopener noreferrer">#ｽﾎﾟﾁﾊｲ</a>,
 		<a href="https://twitter.com/" target="_blank" rel="noopener noreferrer">twitter.com</a> | <a href="https://twitter.com/hashtag/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2?src=hash" target="_blank" rel="noopener noreferrer">#ｽﾎﾟﾁﾊｲ</a>,
 		<a href="https://bsky.app/" target="_blank" rel="noopener noreferrer">bsky.app</a> | <a href="https://bsky.app/hashtag/%EF%BD%BD%EF%BE%8E%EF%BE%9F%EF%BE%81%EF%BE%8A%EF%BD%B2" target="_blank" rel="noopener noreferrer">#ｽﾎﾟﾁﾊｲ</a><br>
 	</p>
 	<hr>
       <div id="login">
-    	<a href="/login" class="btn btn-primary">Spotifyと接続</a>
+    	<a href="/login" class="btn btn-primary" data-i18n="login.connect">Connect to Spotify</a>
       </div>
 
       <div id="loggedin">
 
-		<h2>再生中</h2>
+		<h2 data-i18n="playing.title">Now Playing</h2>
         <div id="currently-playing"></div>
 
 		<input type="checkbox" id="trackinfo-us" name="trackinfo-us">
-		<label for="trackinfo-us">トラック情報を英語で取得</label><br>
+		<label for="trackinfo-us" data-i18n="playing.trackinfo_en">Get track info in English</label><br>
 
 		<!-- input type="checkbox" id="spochihai-ad" name="spochihai-ad">
 		<label for="spochihai-ad">#ｽﾎﾟﾁﾊｲ を宣伝する</label><br -->
 
-        <button class="btn btn-default" id="update">更新</button>
+        <button class="btn btn-default" id="update" data-i18n="playing.update">Refresh</button>
 		<input type="checkbox" id="auto-update" name="auto-update">
-		<label for="auto-update">自動更新</label>
+		<label for="auto-update" data-i18n="playing.auto_update">Auto refresh</label>
 		&nbsp;
-        <button class="btn btn-default" id="search-google">Googleで検索</button>
-        <button class="btn btn-default" id="search-youtube">YouTubeで検索</button>
+        <button class="btn btn-default" id="search-google" data-i18n="playing.search_google">Search on Google</button>
+        <button class="btn btn-default" id="search-youtube" data-i18n="playing.search_youtube">Search on YouTube</button>
 
 		<div>
-		<h2>コメント</h2>
+		<h2 data-i18n="comment.title">Comment</h2>
 		<textarea id="comment-textarea"></textarea>
 		</div>
 
 		<div>
-		<h2>タグ</h2>
+		<h2 data-i18n="tag.title">Tags</h2>
 		<!-- input type="checkbox" id="tag-enable" name="tag-enable">
 		<label for="tag-enable">有効</label><br/ -->
 
-		追加 <input type="text" id="append-tag" placeholder="#まめもなうぷれ">
+		<label for="append-tag" data-i18n="tag.append">Additional</label>
+		<input type="text" id="append-tag" placeholder="#nowplaying" data-i18n-placeholder="tag.placeholder">
 		</div>
 
-		<h2>スタイル</h2>
-        <button class="btn btn-default" id="track-style-change">切替</button>
+		<h2 data-i18n="style.title">Style</h2>
+        <button class="btn btn-default" id="track-style-change" data-i18n="style.change">Switch</button>
 		<div id="track-style"></div>
 
-		<h2>投稿</h2>
+		<h2 data-i18n="post.title">Post</h2>
 		<table class="post-select">
 			<tr>
 				<th>clipboard</th>
-				<td><button class="btn btn-default" id="copy-to-clipboard">コピー</button></td>
+				<td><button class="btn btn-default" id="copy-to-clipboard" data-i18n="post.copy">Copy</button></td>
 			</tr><tr>
 				<th>mastodon</th>
 				<td>
-				<input type="text" id="mstdn-instance" placeholder="mstdn.jp"> で 
-		        <button class="btn btn-default" id="toot">トゥート</button><br/>
+				<label for="mstdn-instance" data-i18n="post.instance">Instance</label>
+				<input type="text" id="mstdn-instance" placeholder="mstdn.jp">
+		        <button class="btn btn-default" id="toot" data-i18n="post.toot">Toot</button><br/>
 				<div class="mstdn-instances">
 					<a data-instance="don.mamemo.online">don.mamemo.online</a> |
 					<a data-instance="fedibird.com">fedibird.com</a> |
@@ -78,12 +89,12 @@
 			</tr><tr>
 				<th>twitter</th>
 				<td>
-        			<button class="btn btn-default" id="tweet">ツイート</button>
+        			<button class="btn btn-default" id="tweet" data-i18n="post.tweet">Tweet</button>
 				</td>
 			</tr><tr>
 				<th>bluesky</th>
 				<td>
-        			<button class="btn btn-default" id="skeet">ポスト</button>
+        			<button class="btn btn-default" id="skeet" data-i18n="post.skeet">Post</button>
 				</td>
 			</tr>
 		</table>
@@ -92,20 +103,20 @@
 		<hr>
 
 		<div id="admin">
-        <button class="btn btn-default" id="logout">ログアウト</button>
-        <button class="btn btn-default" id="reconnect">再接続</button>
+        <button class="btn btn-default" id="logout" data-i18n="admin.logout">Log out</button>
+        <button class="btn btn-default" id="reconnect" data-i18n="admin.reconnect">Reconnect</button>
 		</div>
 
 		<div id="debug"></div>
 	<hr>
-	<p>うまく動作しない場合は、「再接続」を押してしてください。</p>
+	<p data-i18n="admin.help">If something does not work, press "Reconnect".</p>
       </div>
 
 	<hr>
 
 	<p>
-	ソースコードは<a href="https://github.com/mamemomonga/spochihai" target="_blank" rel="noopener noreferrer">こちら</a> |
-	制作: mamemomonga
+	<a href="https://github.com/mamemomonga/spochihai" target="_blank" rel="noopener noreferrer" data-i18n="footer.source">Source code</a> |
+	<span data-i18n="footer.author">Author</span>: mamemomonga
 	</p>
 
     </div>
