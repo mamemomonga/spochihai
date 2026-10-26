@@ -3,6 +3,7 @@
 //   node build.js          ビルド
 //   node build.js --watch  更新監視
 // ------------------------
+import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import { watch } from 'node:fs'
 import path from 'node:path'
@@ -26,6 +27,16 @@ const esbuildOptions = {
 	minify: !DEVELOPMENT,
 	sourcemap: DEVELOPMENT,
 	logLevel: 'info',
+	plugins: [{
+		// JSを更新したらHTML内の参照も更新する
+		name: 'rebuild-html',
+		setup(build) {
+			build.onEnd((result)=>{
+				if(result.errors.length) { return }
+				return buildHtml()
+			})
+		}
+	}],
 }
 
 // SCSS展開とCSS圧縮
@@ -36,9 +47,20 @@ async function buildSass() {
 	await fs.writeFile(`${OUT}/base.css`, result.css)
 }
 
+// 内容のハッシュ(キャッシュ対策)
+async function assetHash(file) {
+	const buf = await fs.readFile(`${OUT}/${file}`).catch(()=>null)
+	return buf ? crypto.createHash('sha256').update(buf).digest('hex').slice(0, 10) : null
+}
+
 // HTML圧縮
+// CDNやブラウザに古いJS/CSSが残らないよう、参照URLにハッシュを付ける
 async function buildHtml() {
-	const src = await fs.readFile('src/client/index.html', 'utf8')
+	let src = await fs.readFile('src/client/index.html', 'utf8')
+	for(const file of ['index.js', 'base.css']) {
+		const hash = await assetHash(file)
+		if(hash) { src = src.replaceAll(`"/${file}"`, `"/${file}?v=${hash}"`) }
+	}
 	const html = DEVELOPMENT ? src : await minify(src, { collapseWhitespace: true })
 	await fs.writeFile(`${OUT}/index.html`, html)
 }
@@ -51,7 +73,8 @@ async function buildAssets() {
 }
 
 async function buildStatic() {
-	await Promise.all([ buildSass(), buildHtml(), buildAssets() ])
+	await Promise.all([ buildSass(), buildAssets() ])
+	await buildHtml()
 }
 
 await fs.mkdir(OUT, { recursive: true })
