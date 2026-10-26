@@ -6,36 +6,38 @@
 
 ## 環境
 
-実行には、DockerおよびDocker Composeが必要です。
+実行には、DockerおよびDocker Compose (v2) が必要です。
 
-	$ docker-compose build
+	$ docker compose build
 
 ## 設定
 
-.env を .env.example を参考にして編集します。
+.env を example.env を参考にして編集します。
 
-Spotifyのトークンの取得方法は、[Spotify for Developers](https://developer.spotify.com/documentation/web-api/quick-start/)を参照。
+Spotifyのトークンの取得方法は、[Spotify for Developers](https://developer.spotify.com/documentation/web-api/tutorials/getting-started)を参照。
 
-	$ cp .env.example .env
+SPCHI\_REDIRECT\_URI が `https://` で始まる場合、Cookieに Secure 属性が付与され、HSTSが有効になります。公開時はリバースプロキシでHTTPS化してください。
+
+	$ cp example.env .env
 	$ vim .env
 
 ## 起動
 
 .envのSPCHI\_PORTで設定したポートでHTTPサーバが起動される。 CTRL+Cで終了
 
-	$ docker-compose up
+	$ docker compose up
 
 以下の方法でバックグラウンド動作になる。
 
-	$ docker-compose up -d
+	$ docker compose up -d
 
 終了は以下の通り
 
-	$ docker-compose down
+	$ docker compose down
 
 ## アップデート
 
-最新版を git clone して docker-compose buildし再起動する。以下のスクリプトでも可能。
+最新版を git clone して docker compose buildし再起動する。以下のスクリプトでも可能。
 
 	$ bin/update.sh
 
@@ -47,11 +49,14 @@ Spotifyのトークンの取得方法は、[Spotify for Developers](https://deve
 
 	$ eval "$( cat .env | perl -E 'while(<>) { chomp; say "export $_" }' )" 
 
-## serverプロセスがdetachされたときにkillする方法
+## ローカルでの開発
 
-エラーがでるとたまにdetachされてしまう
+Node.js 24 以降が必要です。
 
-	$ ps ax | grep 'node var/build/server.js' | grep -v 'grep' | awk '{ print $1 }' | xargs kill
+	$ npm install
+	$ npm run dev
+
+`npm run build` でクライアントをビルドし、`npm start` でサーバを起動します。
 
 # License
 

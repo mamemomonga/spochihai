@@ -1,2 +1,4 @@
 /node_modules
 /var
+/.env
+/.git
